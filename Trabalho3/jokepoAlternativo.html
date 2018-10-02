@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+
+		<meta charset="utf-8"></meta>
+
+		<title>JokenPo</title>
+
+		<link href="https://fonts.googleapis.com/css?family=Roboto+Slab|Titillium+Web|Ubuntu" rel="stylesheet"> 
+		<link rel="stylesheet" type="text/css" href="jokenEstilos.css">
+
+	</head>
+	
+	<body>
+
+		<h2 align="center">JOKENPO</h2>
+        <img src="tesoura.jpg" width="200" class="escolha" id="player" height="150" border="2px">
+        <img src="tesoura.jpg" width="200" class="escolha" id="computer" height="150" border="2px">
+		
+		<table id="table1" border="0" cellpadding="0" cellspacing="0" width="475" align="center">
+			<tr>
+				<td width="468">
+
+					<form name=f1><p align="center">
+                        <a id="1"></a>
+						<a onclick="game(0)" type="button" name="bpp1"><img src="papel.jpg" width="200" height="150" border="2px"></a>
+						<a onclick="game(1)" type="button" name="bpdr"><img src="pedra1.jpg" width="200" height="150" border="2px"></a>
+						<a onclick="game(2)" type="button" name="bptes"><img src="tesoura.jpg" width="200" height="150" border="2px"></a>
+
+						<br>
+						<input onclick=limpar() type=button value=Resetar name=bres>
+
+						<br>
+						<br>
+						
+						<input size=50 name=tres></p>
+						
+						<table id="table2" border="0" cellpadding="20" cellspacing="0" width="550">
+						
+							<tr>
+							
+								<td width="218" align="right">Jogador:</td>
+								
+								<td width="223">
+									<input size=7 name=tpla class="first_field">
+								</td>
+								
+							</tr>
+							
+							<tr>
+							
+								<td width="218" align="right">Empate:</td>
+								
+								<td width="223">
+									<input size=7 name=temp class="first_field">
+								</td>
+								
+							</tr>
+							
+							<tr>
+							
+								<td width="218" align="right">
+								
+									<font size="3" face="Ubuntu">computer:</font>
+								
+								</td>
+								
+								<td width="223">
+								
+									<input size=7 name=tcom>
+								
+								</td>
+							
+							</tr>
+						
+						</table>
+
+					</form>
+
+				</td>
+
+			</tr>
+
+		</table>
+	
+	</body>
+
+	<script type="text/javascript">
+ 
+		var p,c,e
+		 
+		p=0
+		c=0
+		e=0
+
+		function game(jp) {
+		              
+		        var jc,r,np,nc
+		 
+		        jc=Math.floor(Math.random()*3)
+		          document.getElementById("computer").style.display = "block";
+                    document.getElementById("player").style.display = "block";
+		        if (jc==0){
+                    document.getElementById("computer").setAttribute("src","papel.jpg");
+		        	nc="PAPEL";	
+		        } 
+		 
+		        if (jc==1){
+                    document.getElementById("computer").setAttribute("src","pedra1.jpg");
+		        	nc="PEDRA";
+		        }
+		 
+		        if (jc==2){
+                    document.getElementById("computer").setAttribute("src","tesoura.jpg");
+		        	nc="TESOURA";
+		        } 
+		 
+		        if (jp==0){
+                    document.getElementById("player").setAttribute("src","papel.jpg");
+		        	np="PAPEL";	
+		        } 
+		 
+		        if (jp==1){
+                    document.getElementById("player").setAttribute("src","pedra1.jpg");
+		        	np="PEDRA";
+		        } 
+		 
+		        if (jp==2){
+                    document.getElementById("player").setAttribute("src","tesoura.jpg");
+		        	np="TESOURA";
+		        } 
+
+		        r=1
+		 
+		        if (jc==jp){
+		        	r=0;
+		        } 
+		        if (jc==0 && jp==1){
+		        	r=2;
+		        }
+		 		
+		        if (jc==1 && jp==2){
+		        	r=2;
+		        }
+		 
+		        if (jc==2 && jp==0){
+		        	r=2;
+		        } 
+		 
+		        if (r==0){
+
+		        	document.f1.tres.value=np+" contra "+nc+" : Empate."
+
+		        	e++;
+		        } 
+
+		        if (r==1) {
+		 			document.getElementById('1').innerHTML = '<audio src="ganhou.aac" autoplay></audio>';
+		            document.f1.tres.value=np+" contra "+nc+" : O Jogador Venceu."
+		            p++;
+		            //<embed src="ganhou.aac" hidden="true">
+		            
+		        }
+		 
+		        if (r==2) {
+		 			
+		 			document.getElementById('1').innerHTML = '<audio src="perdeu.aac" autoplay></audio>';
+		            document.f1.tres.value=np+" contra "+nc+" : O computer Venceu."
+		            c++;
+		        }
+		 
+		        document.f1.tpla.value=p;
+		        document.f1.tcom.value=c;
+		        document.f1.temp.value=e;
+		}
+
+		function limpar(){
+		
+			window.location.reload(true);
+		        	
+		}
+
+	</script>
+
+</html>
