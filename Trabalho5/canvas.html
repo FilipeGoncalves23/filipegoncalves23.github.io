@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+	<head>
+
+		<meta charset="utf-8"></meta>
+
+		<title>Canvas</title>
+
+		<link href="https://fonts.googleapis.com/css?family=Roboto+Slab|Titillium+Web|Ubuntu" rel="stylesheet"> 
+		<link rel="stylesheet" type="text/css" href="canvasestilos.css">
+
+	</head>
+	
+	<body>
+
+		<div class="score" id="score">0</div>
+		<canvas id="canvas" height="500px" width="500px"></canvas>
+	</body>
+
+	<script type="text/javascript">
+		
+		var 
+		canvas = document.getElementById('canvas'),
+		ctx = canvas.getContext('2d'),
+		scoreIs = document.getElementById('score'),
+		direcao = '',
+		direcaoQueue = '',
+		fps = 90,
+		snake = [],
+		snakeLength = 2,
+		cellSize = 15,
+		snakeColor = 'black',
+		foodColor = 'green',
+		foodX = [],
+		foodY = [],
+		
+		food = {
+			x: 0, 
+			y: 0
+		},
+		
+		score = 0,
+		hit = new Audio('hit.wav');
+		pick = new Audio('pick.wav');
+		
+		for(i = 0; i <= canvas.width - cellSize; i+=cellSize) {
+			foodX.push(i);
+			foodY.push(i);
+		}
+		
+		canvas.setAttribute('tabindex',1);
+		canvas.style.outline = 'none';
+		canvas.focus();
+
+		function drawSquare(x,y,color) {
+			ctx.fillStyle = color;
+			ctx.fillRect(x, y, cellSize, cellSize);	
+		}
+		
+		function createFood() { 
+			food.x = foodX[Math.floor(Math.random()*foodX.length)]; 
+			food.y = foodY[Math.floor(Math.random()*foodY.length)]; 
+			
+			for(i = 0; i < snake.length; i++) {
+				if(checkCollision(food.x, food.y, snake[i].x, snake[i].y)) {
+					createFood(); 
+				}
+			}
+		}
+		
+		function drawFood() {
+			drawSquare(food.x, food.y, foodColor);
+		}
+		
+		function setBackground(color1, color2) {
+			ctx.fillStyle = color1;
+			ctx.strokeStyle = color2;
+
+			ctx.fillRect(0, 0, canvas.height, canvas.width);
+
+			for(var x = 0.5; x < canvas.width; x += cellSize) {
+				ctx.moveTo(x, 0);
+				ctx.lineTo(x, canvas.height);
+			}
+			for(var y = 0.5; y < canvas.height; y += cellSize) {
+				ctx.moveTo(0, y);
+				ctx.lineTo(canvas.width, y);
+			}
+
+			ctx.stroke()
+		}
+		
+		function createSnake() {
+			snake = [];
+				for(var i = snakeLength; i > 0; i--) {
+				k = i * cellSize;
+				snake.push({x: k, y:0});
+			}
+		}
+		
+		function drawSnake() {
+			for(i = 0; i < snake.length; i++) {
+				drawSquare(snake[i].x, snake[i].y, snakeColor);
+			}
+		}
+		
+		function escolhaDirecao(keycode) {
+			if(keycode == 37 && direcao != 'right') { direcaoQueue = 'left'; }
+			else if(keycode == 38 && direcao != 'down') { direcaoQueue = 'up'; }
+			else if(keycode == 39 && direcao != 'left') { direcaoQueue = 'right'; }
+			else if(keycode == 40 && direcao != 'top') { direcaoQueue = 'down' }
+		}
+		
+		function moveSnake() {
+			var x = snake[0].x; 
+	
+			var y = snake[0].y;
+
+			direcao = direcaoQueue;
+
+			if(direcao == 'right') {
+				x+=cellSize;
+			}
+			else if(direcao == 'left') {
+				x-=cellSize;
+			}
+			else if(direcao == 'up') {
+				y-=cellSize;
+			}
+			else if(direcao == 'down') {
+				y+=cellSize;
+			}
+			
+			var tail = snake.pop(); 
+			tail.x = x;
+			tail.y = y;
+			snake.unshift(tail);
+		}
+
+		function checkCollision(x1,y1,x2,y2) {
+			if(x1 == x2 && y1 == y2) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		
+		function game(){
+			var head = snake[0];
+			
+			if(head.x < 0 || head.x > canvas.width - cellSize  || head.y < 0 || head.y > canvas.height - cellSize) {
+				hit.play();
+				setBackground();
+				createSnake();
+				drawSnake();
+				createFood();
+				drawFood();
+				direcaoQueue = 'right';
+				score = 0;
+			}
+			// checking for colisions with snake's body
+			for(i = 1; i < snake.length; i++) {
+				if(head.x == snake[i].x && head.y == snake[i].y) {
+					hit.play(); // playing sounds
+					setBackground();
+					createSnake();
+					drawSnake();
+					createFood();
+					drawFood();
+					direcaoQueue = 'right';
+					score = 0;
+				}
+			}
+			// checking for collision with food
+			if(checkCollision(head.x, head.y, food.x, food.y)) {
+				snake[snake.length] = {x: head.x, y: head.y};
+				createFood();
+				drawFood();
+				pick.play();
+				score += 10;
+			}
+
+			canvas.onkeydown = function(evt) {
+				evt = evt || window.event;
+				escolhaDirecao(evt.keyCode);
+			};
+
+		   ctx.beginPath();
+		   setBackground('#fff', '#eee');
+		   scoreIs.innerHTML = score;
+		   drawSnake();
+		   drawFood();
+		   moveSnake();
+		}
+
+		function newGame() {
+			direcao = 'right'; 
+			direcaoQueue = 'right';
+			ctx.beginPath();
+			createSnake();
+			createFood();
+
+			if(typeof loop != 'undefined') {
+				clearInterval(loop);
+			}
+			else {
+				loop = setInterval(game, fps);
+			}
+		}
+		newGame();
+	</script>
+</html>	

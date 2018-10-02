@@ -1,0 +1,26 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+html {
+	height: 100%;
+}
+body {
+	background-color: #006400;
+	text-align: center;
+}
+.score {
+	font-family: Ubuntu;
+	font-size: 3em;
+	position: relative;
+	color: black;
+}
+canvas {
+	display: block;
+	position: absolute;
+	margin: auto;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+}
