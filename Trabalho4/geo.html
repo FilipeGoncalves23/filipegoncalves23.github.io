@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>GeoLocalização</title>
+    <style type="text/css">
+            html, body, #map { height: 100%; margin: 0; }
+      </style>
+    
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAmS6zukB1-DDhWw7HPECYSEN4NZhhAwo&callback=initMap">
+    </script>
+
+	</head>
+<body>
+    
+    <div id="map"></div>
+    <script type="text/javascript">
+    	
+    document.addEventListener('DOMContentLoaded', function(){
+
+    var target = document.querySelector('#map');
+    
+    navigator.geolocation.getCurrentPosition(function(position) {
+
+        var latitude   = position.coords.latitude;
+        var longitude  = position.coords.longitude;
+        var coordinate = new google.maps.LatLng(latitude, longitude);
+
+        var optionsMap = {
+                    center : coordinate,
+                    zoom: 17,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+
+        var map = new google.maps.Map(target, optionsMap);
+
+        var configMarker = {
+            position : coordinate,
+            map : map,
+            title: "Você está aqui!"
+        };
+
+        var marker = new google.maps.Marker(configMarker);
+    });
+});
+    </script>  
+</body>
+</html>
+
