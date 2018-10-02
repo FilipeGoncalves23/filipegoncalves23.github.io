@@ -1,0 +1,36 @@
+body {
+
+	font-family: "Roboto Slab", Helvetica, Arial, sans-serif;
+	color: #4d4d4d;
+}
+
+html {
+
+	background: url('plano.jpg');
+	background-size: cover;
+	background-position: center;
+	background-repeat: repeat;
+}
+
+h1{
+
+	margin: 0;
+	font-family: "Titillium Web";
+	background-color: lightgrey;
+	
+}
+h2 {
+  margin: 0;
+  padding: 0;
+  font-family: "Ubuntu";
+  font-style: oblique;
+  font-weight: lighter;
+  color: #C0C0C0;
+}
+
+
+
+
+
+
+
