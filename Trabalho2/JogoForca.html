@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	
+	<head>
+
+		<title>Jogo da Forca</title>
+
+		<meta charset="utf-8"></meta>
+
+		<link href="https://fonts.googleapis.com/css?family=Roboto+Slab|Titillium+Web|Ubuntu" rel="stylesheet"> 
+		<link rel="stylesheet" type="text/css" href="estilos.css">
+	</head>
+	
+	<body>
+
+		<!--<div align="center">
+			
+			<h2>JOGO DA FORCA</h2>
+			<br>
+
+		</div>-->
+		<div>
+			
+			<h2 align="center">JOGO DA FORCA DE FRUTAS</h2>
+
+		</div>
+		
+			
+		<div align="center" id="dvPalavra" class="dvDisplay">
+
+			<input type="text" id="letra0" class="letra" maxlength="1" disabled>
+			<input type="text" id="letra1" class="letra" maxlength="1" disabled>
+			<input type="text" id="letra2" class="letra" maxlength="1" disabled>
+			<input type="text" id="letra3" class="letra" maxlength="1" disabled>
+			<input type="text" id="letra4" class="letra" maxlength="1" disabled>
+			<input type="text" id="letra5" class="letra" maxlength="1" disabled>
+			<input type="text" id="letra6" class="letra" maxlength="1" disabled>
+			<input type="text" id="letra7" class="letra" maxlength="1" disabled>
+			<input type="text" id="letra8" class="letra" maxlength="1" disabled>
+			<input type="text" id="letra9" class="letra" maxlength="1" disabled>
+			<input type="text" id="letra10" class="letra" maxlength="1" disabled>
+			<input type="text" id="letra11" class="letra" maxlength="1" disabled>
+			<input type="text" id="letra12" class="letra" maxlength="1" disabled>
+			<input type="text" id="letra13" class="letra" maxlength="1" disabled>
+			<input type="text" id="letra14" class="letra" maxlength="1" disabled>
+			<input type="text" id="letra15" class="letra" maxlength="1" disabled>
+			<input type="text" id="letra16" class="letra" maxlength="1" disabled>
+			<input type="text" id="letra17" class="letra" maxlength="1" disabled>
+			<input type="text" id="letra18" class="letra" maxlength="1" disabled>
+			<input type="text" id="letra19" class="letra" maxlength="1" disabled>
+
+		</div>
+		<div id="dvMenu" class="dvDisplay">
+			
+			
+
+		</div>
+		<div id="dvJogador" class="dvDisplay">
+			
+			<div id="controlesJogador">
+				<h5>Digite uma letra:</h3>
+				<input type="text" id="letraJ" class="letraJ" maxlength="1"><p></p>
+				<button onclick="inicia()">Nova Palavra</button>
+				<button onclick="jogar()">Jogar</button>
+				<!--<button onclick="resposta()">Resposta</button>-->
+				<div id="dvMsg"></div><br>
+				<div id="dvLetrasDigitadas">Letras Digitadas:</div>
+				
+			</div>
+
+			<div id="dvForca">
+				
+				<img src="cabeca.png" id="cabeca" width="200" height="100">
+				<img src="corpo.png" id="corpo" width="20" height="120">
+				<img src="bracoEsquerdo.png" id="bracoEsquerdo" width="100" height="100">
+				<img src="bracoDireito.png" id="bracoDireito" width="100" height="100">
+				<img src="pernaEsquerda.png" id="pernaEsquerda" width="100" height="100">
+				<img src="pernaDireita.png" id="pernaDireita" width="100" height="100">
+				<img src="forca.png" id="forca" width="30" height="430">
+				<img src="forca2.png" id="forca2" width="250" height="20">
+			</div>
+
+		</div>
+
+	</body>
+	
+	<script type="text/javascript">
+		
+		var palavras = ["Abacate", "Abacaxi", "Abiu", "Abricó", "Açaí", "Acerola", "Akee", "Ameixa", "Amêndoa", "Amora", "Anonáceas", "Araçá", "Atemoya", "Avelã", "Babaco", "Bacaba", "Bacuri", "Banana", "Baru", "Bilimbi", "Biribá", "Butiá", "Cabeludinha", "Cacau", "Cagaita", "Caimito", "Cajá", "Caju", "Calabaça", "Calabura", "Calamondin", "Cambucá", "Cambuci", "Damasco", "Feijoa", "Figo", "Framboesa", "Glicosmis", "Goiaba", "Granadilla", "Graviola", "Groselha", "Grumixama", "Guabiju", "Guabiroba", "Guaraná", "Guariroba", "Ilama", "Ingá", "Jabuticaba", "Jaca", "Jambo", "Jambolão", "Jaracatiá", "Jatobá", "Jenipapo", "Jeribá", "Jujuba", "Kiwi", "Langsat", "Laranja", "Lichia", "Limão", "Longan", "Lucuma", "Mabolo", "Maçã", "Macadâmia", "Mamão", "Mamey", "Mamoncillo", "Maná – Cubiu", "Manga", "Mangaba", "Mangostão", "Maracujá", "Marang", "Marmeladinha", "Marmelo", "Marolo", "Marula", "Massala", "Melancia", "Melã", "Mirtilo", "Morango", "Murici", "Naranjilla", "Nectarina", "Nêspera", "Pequi", "Pêra", "Pêssego", "Physalis", "Pinha", "Pinhão", "Pistache", "Pitanga", "Pitaya", "Pitomba", "Pulasan", "Pupunha", "Rambutão", "Romã", "Umbu", "Umê", "Uva", "Uvaia", "Taiúva", "Tâmara", "Tamarindo", "Tangerina", "Tarumã", "Toranja"];
+
+		var qtd=palavras.length-1;
+		var posicao=Math.round(Math.random()*qtd);
+         
+		var palavra=palavras[posicao];
+        //palavra = "Manga";
+        var palavraOriginal = palavra;
+		var tamanho=palavra.length;
+		var cxLetras=[];
+		var acertos;
+		var errosMaximo=7;
+		var erros=0;
+		var desenhos=[];
+		var acertou=false;
+		var jogando=false;
+		var jog;
+
+		function defineLetras(l){
+
+			var obj;
+
+			for(var i=0;i<20;i++){
+				
+				obj=document.getElementById("letra"+i).value="";
+				obj=document.getElementById("letra"+i).style.display="none";
+
+			}
+			for(var i = 0; i <l; i++){
+
+				obj=document.getElementById("letra"+i).style.display="inline-block";
+			}
+		}
+
+		function jogar(){
+
+			jog=document.getElementById("letraJ");
+			jog.focus();
+
+			if(jog.value==""){
+
+				alert("Digite uma Letra");
+			}else{
+
+				if(jogando){
+
+					var obj;
+					var letraTmp = "";
+					var letra;
+					var pesq;
+					letra=jog.value.toUpperCase();
+					jog.value="";
+					acertou=false;
+					pesq=palavra.match(letra);
+                    console.log(letra);
+					while(pesq != null){
+						letraTmp=palavra.indexOf(letra);
+						obj=document.getElementById("letra"+letraTmp).value=letra;
+						palavra=palavra.replace(letra,'0');
+						acertos ++;
+						pesq=palavra.match(letra);
+						acertou=true;
+					}
+                    
+                    document.getElementById("dvLetrasDigitadas").innerHTML+=letra.toUpperCase() + " ";
+
+					if(!acertou){
+						erros++;
+
+						if(erros<7){
+
+							desenhos[erros].style.display="block";
+						}else{
+
+							document.getElementById("cabeca").src="cabecaPerdeu.png";
+							//document.getElementById("dvMsg").innerHTML="PERDEU!";
+							alert(palavraOriginal);
+							jog.focus();
+							alert("VOCE PERDEU !!! KKKKKKK");
+							jogando=false;
+						}
+					}
+
+					if(acertos==tamanho){
+
+						//document.getElementById("dvMsg").innerHTML="";
+						document.getElementById("dvMsg").innerHTML="GANHOU!";
+						jogando=false;						
+					}
+
+				}
+
+			}
+
+		}
+
+		function inicia(){
+
+			jogando=true;
+			jog=document.getElementById("letraJ");
+			jog.value="";
+			jog.focus();
+			acertos=0;
+			erros=0;
+			acertou=false;
+
+			document.getElementById("dvLetrasDigitadas").innerHTML="Letras Digitadas:";
+			posicao=Math.round(Math.random()*qtd);
+			palavra=palavras[posicao].toUpperCase();
+            palavraOriginal = palavra;
+			tamanho=palavra.length;
+
+			defineLetras(tamanho);
+			document.getElementById("dvMsg").innerHTML="";
+			desenhos[1]=document.getElementById("cabeca");			
+			desenhos[2]=document.getElementById("corpo");			
+			desenhos[3]=document.getElementById("bracoEsquerdo");			
+			desenhos[4]=document.getElementById("bracoDireito");			
+			desenhos[5]=document.getElementById("pernaEsquerda");			
+			desenhos[6]=document.getElementById("pernaDireita");
+			document.getElementById("cabeca").src="cabeca.png";
+
+			for (var i=1;i<7;i++) {
+			
+				desenhos[i].style.display="none";
+			}			
+		}
+
+		function resposta(){
+
+			alert(palavraOriginal);
+			jog.focus();
+		}
+
+		window.addEventListener("load",inicia);
+
+	</script>
+
+</html>
