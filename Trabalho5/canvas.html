@@ -12,9 +12,16 @@
 	</head>
 	
 	<body>
-
+		<div>
+			<h1>SNAKE CANVAS</h1>
+		</div>
+		<br>
+		<br>
+		<br>
+		<br>	
+		<h1 align="left">Pontuação:</h1>
 		<div class="score" id="score">0</div>
-		<canvas id="canvas" height="500px" width="500px"></canvas>
+		<canvas id="canvas" height="570px" width="570px"></canvas>
 	</body>
 
 	<script type="text/javascript">
@@ -26,63 +33,72 @@
 		direcao = '',
 		direcaoQueue = '',
 		fps = 90,
-		snake = [],
-		snakeLength = 2,
+		cobra = [],
+		cobraLength = 2,
 		cellSize = 15,
-		snakeColor = 'black',
-		foodColor = 'green',
-		foodX = [],
-		foodY = [],
+		cobraCor = 'black',
+		corComida = 'green',
+		comidaX = [],
+		comidaY = [],
 		
-		food = {
+		comida = {
 			x: 0, 
 			y: 0
 		},
 		
 		score = 0,
+		//teste
 		hit = new Audio('hit.wav');
 		pick = new Audio('pick.wav');
 		
 		for(i = 0; i <= canvas.width - cellSize; i+=cellSize) {
-			foodX.push(i);
-			foodY.push(i);
+
+			comidaX.push(i);
+			comidaY.push(i);
 		}
 		
 		canvas.setAttribute('tabindex',1);
 		canvas.style.outline = 'none';
 		canvas.focus();
 
-		function drawSquare(x,y,color) {
-			ctx.fillStyle = color;
+		function desenhoQuadrado(x,y,cor) {
+
+			ctx.fillStyle = cor;
 			ctx.fillRect(x, y, cellSize, cellSize);	
 		}
 		
-		function createFood() { 
-			food.x = foodX[Math.floor(Math.random()*foodX.length)]; 
-			food.y = foodY[Math.floor(Math.random()*foodY.length)]; 
+		function criaComida() { 
+
+			comida.x = comidaX[Math.floor(Math.random()*comidaX.length)]; 
+			comida.y = comidaY[Math.floor(Math.random()*comidaY.length)]; 
 			
-			for(i = 0; i < snake.length; i++) {
-				if(checkCollision(food.x, food.y, snake[i].x, snake[i].y)) {
-					createFood(); 
+			for(i = 0; i < cobra.length; i++) {
+
+				if(colisao(comida.x, comida.y, cobra[i].x, cobra[i].y)) {
+					criaComida(); 
 				}
 			}
 		}
 		
-		function drawFood() {
-			drawSquare(food.x, food.y, foodColor);
+		function desenhoComida() {
+
+			desenhoQuadrado(comida.x, comida.y, corComida);
 		}
 		
-		function setBackground(color1, color2) {
-			ctx.fillStyle = color1;
-			ctx.strokeStyle = color2;
+		function setBackground(cor1, cor2) {
+
+			ctx.fillStyle = cor1;
+			ctx.strokeStyle = cor2;
 
 			ctx.fillRect(0, 0, canvas.height, canvas.width);
 
 			for(var x = 0.5; x < canvas.width; x += cellSize) {
+
 				ctx.moveTo(x, 0);
 				ctx.lineTo(x, canvas.height);
 			}
 			for(var y = 0.5; y < canvas.height; y += cellSize) {
+
 				ctx.moveTo(0, y);
 				ctx.lineTo(canvas.width, y);
 			}
@@ -90,31 +106,37 @@
 			ctx.stroke()
 		}
 		
-		function createSnake() {
-			snake = [];
-				for(var i = snakeLength; i > 0; i--) {
+		function criaCobra() {
+
+			cobra = [];
+				for(var i = cobraLength; i > 0; i--) {
+
 				k = i * cellSize;
-				snake.push({x: k, y:0});
+				cobra.push({x: k, y:0});
 			}
 		}
 		
-		function drawSnake() {
-			for(i = 0; i < snake.length; i++) {
-				drawSquare(snake[i].x, snake[i].y, snakeColor);
+		function desenhaCobra() {
+
+			for(i = 0; i < cobra.length; i++) {
+
+				desenhoQuadrado(cobra[i].x, cobra[i].y, cobraCor);
 			}
 		}
 		
 		function escolhaDirecao(keycode) {
+
 			if(keycode == 37 && direcao != 'right') { direcaoQueue = 'left'; }
 			else if(keycode == 38 && direcao != 'down') { direcaoQueue = 'up'; }
 			else if(keycode == 39 && direcao != 'left') { direcaoQueue = 'right'; }
 			else if(keycode == 40 && direcao != 'top') { direcaoQueue = 'down' }
 		}
 		
-		function moveSnake() {
-			var x = snake[0].x; 
+		function moveCobra() {
+
+			var x = cobra[0].x; 
 	
-			var y = snake[0].y;
+			var y = cobra[0].y;
 
 			direcao = direcaoQueue;
 
@@ -131,57 +153,66 @@
 				y+=cellSize;
 			}
 			
-			var tail = snake.pop(); 
+			var tail = cobra.pop(); 
 			tail.x = x;
 			tail.y = y;
-			snake.unshift(tail);
+			cobra.unshift(tail);
 		}
 
-		function checkCollision(x1,y1,x2,y2) {
+		function colisao(x1,y1,x2,y2) {
+
 			if(x1 == x2 && y1 == y2) {
+
 				return true;
 			}
 			else {
+
 				return false;
 			}
 		}
 		
-		function game(){
-			var head = snake[0];
+		function jogo(){
+
+			var head = cobra[0];
 			
 			if(head.x < 0 || head.x > canvas.width - cellSize  || head.y < 0 || head.y > canvas.height - cellSize) {
+
 				hit.play();
 				setBackground();
-				createSnake();
-				drawSnake();
-				createFood();
-				drawFood();
+				criaCobra();
+				desenhaCobra();
+				criaComida();
+				desenhoComida();
 				direcaoQueue = 'right';
 				score = 0;
 			}
-			// checking for colisions with snake's body
-			for(i = 1; i < snake.length; i++) {
-				if(head.x == snake[i].x && head.y == snake[i].y) {
-					hit.play(); // playing sounds
+			
+			for(i = 1; i < cobra.length; i++) {
+
+				if(head.x == cobra[i].x && head.y == cobra[i].y) {
+
+					hit.play(); 
 					setBackground();
-					createSnake();
-					drawSnake();
-					createFood();
-					drawFood();
+					criaCobra();
+					desenhaCobra();
+					criaComida();
+					desenhoComida();
 					direcaoQueue = 'right';
 					score = 0;
 				}
 			}
-			// checking for collision with food
-			if(checkCollision(head.x, head.y, food.x, food.y)) {
-				snake[snake.length] = {x: head.x, y: head.y};
-				createFood();
-				drawFood();
+			
+			if(colisao(head.x, head.y, comida.x, comida.y)) {
+
+				cobra[cobra.length] = {x: head.x, y: head.y};
+				criaComida();
+				desenhoComida();
 				pick.play();
-				score += 10;
+				score += 1;
 			}
 
 			canvas.onkeydown = function(evt) {
+
 				evt = evt || window.event;
 				escolhaDirecao(evt.keyCode);
 			};
@@ -189,25 +220,28 @@
 		   ctx.beginPath();
 		   setBackground('#fff', '#eee');
 		   scoreIs.innerHTML = score;
-		   drawSnake();
-		   drawFood();
-		   moveSnake();
+		   desenhaCobra();
+		   desenhoComida();
+		   moveCobra();
 		}
 
-		function newGame() {
+		function novoJogo() {
+
 			direcao = 'right'; 
 			direcaoQueue = 'right';
 			ctx.beginPath();
-			createSnake();
-			createFood();
+			criaCobra();
+			criaComida();
 
 			if(typeof loop != 'undefined') {
+
 				clearInterval(loop);
 			}
 			else {
-				loop = setInterval(game, fps);
+
+				loop = setInterval(jogo, fps);
 			}
 		}
-		newGame();
+		novoJogo();
 	</script>
 </html>	
